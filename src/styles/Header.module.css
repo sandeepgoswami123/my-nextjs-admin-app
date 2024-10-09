@@ -1,0 +1,74 @@
+/* styles/Header.module.css */
+.logo img {
+    height: 40px;
+    width: auto;
+  }
+  
+.header {
+    display: flex;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #333;
+    color: white;
+  }
+  
+  .logo h1 {
+    font-size: 24px;
+    margin: 0;
+    color: white;
+  }
+  
+  .nav {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-left: 28px; /* Space between logo and nav */
+  }
+  
+  .nav a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .nav a:hover {
+    text-decoration: underline;
+  }
+  
+  .hamburger {
+    display: none; /* Hide hamburger by default */
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    margin-left: auto; /* Aligns hamburger to the right */
+  }
+  
+  @media (max-width: 768px) {
+    .nav {
+      display: none; /* Hide menu by default */
+      flex-direction: column; /* Stack menu items vertically */
+      position: absolute;
+      top: 60px; /* Adjust based on header height */
+      left: 0;
+      background-color: #333;
+      width: 100%;
+      /* padding: 10px; */
+    }
+  
+    .nav.navOpen {
+      display: flex; /* Show menu when toggled */
+    }
+  
+    .hamburger {
+      display: block; /* Show hamburger menu */
+    }
+  
+    /* Make nav links full width in mobile */
+    .nav a {
+      padding: 10px; /* Add padding for touch targets */
+      width: 100%; /* Full width for mobile */
+      text-align: center; /* Center align text */
+    }
+  }
+  

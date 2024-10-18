@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+mongoose.set('debug', true);
 
 const connectDB = async () => {
   if (mongoose.connection.readyState >= 1) return;

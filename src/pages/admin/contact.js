@@ -1,24 +1,40 @@
-// pages/admin/contact.js
-
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'; // Import useRouter from Next.js
 import AdminLayout from './components/AdminLayout';
 
 const ManageContact = () => {
   const [content, setContent] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Add auth state
+  const router = useRouter(); // Initialize router
 
   useEffect(() => {
-    // Fetch existing content
-    const fetchContent = async () => {
-      const res = await fetch('/api/content/contact');
-      const data = await res.json();
-      setContent(data.content || '');
-    };
+    const token = localStorage.getItem('token');
 
-    fetchContent();
-  }, []);
+    if (!token) {
+      router.push('/admin'); // Redirect to login if not authenticated
+    } else {
+      setIsAuthenticated(true); // Set auth status
+    }
+  }, [router]); // Add router to dependencies
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      // Fetch existing content only after authentication
+      const fetchContent = async () => {
+        const res = await fetch('/api/content/contact', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await res.json();
+        setContent(data.content || '');
+      };
+
+      fetchContent();
+    }
+  }, [isAuthenticated]);
 
   const handleSave = async () => {
-    // Save updated content
     const token = localStorage.getItem('token');
     const res = await fetch('/api/content/contact', {
       method: 'PUT',
@@ -35,6 +51,10 @@ const ManageContact = () => {
       alert('Failed to update content');
     }
   };
+
+  if (!isAuthenticated) {
+    return null; // Don't render anything until authenticated
+  }
 
   return (
     <AdminLayout>

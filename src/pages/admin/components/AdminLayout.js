@@ -1,10 +1,7 @@
-// components/AdminLayout.js
-
 import styles from '../../../styles/AdminLayout.module.css';
-
 import Link from 'next/link';
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = ({ children, onLogout }) => {  // Accept onLogout as a prop
   return (
     <div className={styles.container}>
       {/* Header */}
@@ -21,14 +18,27 @@ const AdminLayout = ({ children }) => {
         <aside className={styles.sidebar}>
           <nav>
             <ul>
+            <li>
+                <Link href="/admin/dashboard">Dashboard</Link>
+              </li>
               <li>
                 <Link href="/admin/home">Manage Home</Link>
+              </li>
+              <li>
+                <Link href="/admin/view-homepage">View Home</Link>
+              </li>
+              <li>
+                <Link href="/admin/edit-homepage">Edit Home</Link>
               </li>
               <li>
                 <Link href="/admin/contact">Manage Contact</Link>
               </li>
               <li>
                 <Link href="/admin/donation">Manage Donation</Link>
+              </li>
+              <li>
+                {/* Styled like a link */}
+                <a onClick={onLogout} className={styles.link}>Logout</a>
               </li>
             </ul>
           </nav>

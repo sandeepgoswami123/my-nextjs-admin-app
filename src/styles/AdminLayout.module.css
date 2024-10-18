@@ -81,6 +81,16 @@
     bottom: 0;
   }
   
+  .link {
+    text-decoration: none;
+    color: #0070f3; /* Same color as other links */
+    cursor: pointer;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  
   /* Mobile responsiveness */
   @media (max-width: 768px) {
     .main {

@@ -1,0 +1,60 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .editButton, .deleteButton {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .editButton {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .deleteButton {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .editButton:hover {
+    background-color: #45a049;
+  }
+  
+  .deleteButton:hover {
+    background-color: #e53935;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .table, .table th, .table td {
+      font-size: 14px;
+    }
+    .editButton, .deleteButton {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+  }
+  

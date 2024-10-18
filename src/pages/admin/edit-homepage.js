@@ -1,18 +1,17 @@
 import AdminLayout from './components/AdminLayout';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styles from '../../styles/AdminPage.module.css'; // Updated CSS for responsiveness
+import styles from '../../styles/AdminHomeView.module.css';
 
-export default function AdminPage() {
-  const initialFormData = {
+export default function EditHomepage() {
+  const [formData, setFormData] = useState({
     heading: '',
     shortDesc: '',
     longDesc: ''
-  };
-
-  const [formData, setFormData] = useState(initialFormData);
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+  const { id } = router.query; // Get the id from query parameters
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -23,6 +22,39 @@ export default function AdminPage() {
       setIsAuthenticated(true);
     }
   }, [router]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (id) {
+        try {
+         const response = await fetch(`/api/homepage/get/${id}`);
+
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+          
+          const data = await response.json();
+
+          // Check if the data is valid
+          if (data) {
+            setFormData({
+              heading: data.heading,
+              shortDesc: data.shortDesc,
+              longDesc: data.longDesc,
+            });
+          } else {
+            alert('No data found for this ID');
+          }
+        } catch (error) {
+          console.error('Error fetching homepage content:', error);
+          alert('Error fetching data');
+        }
+      }
+    };
+
+    fetchData();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,24 +69,26 @@ export default function AdminPage() {
 
     const token = localStorage.getItem('token');
 
-    const response = await fetch('/api/homepage/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch(`/api/homepage/update/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Failed to update data');
+      }
+
       const result = await response.json();
       alert(result.message);
-
-      // Reset form data to initial values
-      setFormData(initialFormData);
-    } else {
-      const errorResult = await response.json();
-      alert(`Error: ${errorResult.message}`);
+      router.push('/admin/view-homepage'); // Redirect to view page after update
+    } catch (error) {
+      console.error('Error updating homepage content:', error);
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -65,7 +99,7 @@ export default function AdminPage() {
   return (
     <AdminLayout>
       <div>
-        <h1 style={{ textAlign: 'center' }}>Add HomePage Content</h1>
+        <h1 style={{ textAlign: 'center' }}>Edit HomePage Content</h1>
         <form onSubmit={handleSubmit} className={styles.formContainer}>
           <div className={styles.inputWrapper}>
             <label>Heading:</label>
@@ -75,7 +109,7 @@ export default function AdminPage() {
               value={formData.heading}
               onChange={handleChange}
               required
-              className={styles.inputField} // Adding class here
+              className={styles.inputField}
             />
           </div>
           <div className={styles.inputWrapper}>
@@ -86,7 +120,7 @@ export default function AdminPage() {
               value={formData.shortDesc}
               onChange={handleChange}
               required
-              className={styles.inputField} // Adding class here
+              className={styles.inputField}
             />
           </div>
           <div className={styles.inputWrapper}>
@@ -96,10 +130,10 @@ export default function AdminPage() {
               value={formData.longDesc}
               onChange={handleChange}
               required
-              className={styles.textAreaField} // Adding class here
+              className={styles.textAreaField}
             ></textarea>
           </div>
-          <button type="submit" className={styles.submitButton}>Submit</button>
+          <button type="submit" className={styles.submitButton}>Update</button>
         </form>
       </div>
     </AdminLayout>

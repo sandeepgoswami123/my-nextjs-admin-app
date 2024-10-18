@@ -1,5 +1,3 @@
-// pages/admin/dashboard.js
-
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AdminLayout from './components/AdminLayout';
@@ -19,7 +17,7 @@ const Dashboard = () => {
   }, [router]);
 
   // Logout function
-  const handleLogout = async () => {
+  const handleLogout = () => {
     // Clear the token from localStorage
     localStorage.removeItem('token');
 
@@ -27,12 +25,11 @@ const Dashboard = () => {
     router.push('/admin');
   };
 
-  if (!isAuthenticated) return null;
+  if (!isAuthenticated) return null; // Render nothing until authenticated
 
   return (
-    <AdminLayout>
+    <AdminLayout onLogout={handleLogout}> {/* Pass handleLogout as prop */}
       <h2>Welcome to the Admin Dashboard</h2>
-      <button onClick={handleLogout}>Logout</button>
     </AdminLayout>
   );
 };
